@@ -1,7 +1,10 @@
 "use client"
 import React, { useState } from "react";
-
+import { useRouter } from 'next/navigation';
+import Link from "next/link";
 export default function Registration() {
+    const router = useRouter();
+
     const [userDetail, setUserDetail] = useState({
         name: "",
         email: "",
@@ -16,29 +19,38 @@ export default function Registration() {
     const handelInputchange = (e) => {
         const { name, value } = e.target;
         setUserDetail((pre) => ({ ...pre, [name]: value }))
+        setNamePlace(false)
+        setEmailPlace(false)
+        setPassPlace(false)
+        setconPassPlace(false)
     }
     const Resisterhandler = () => {
-        error = 0
-        if (userDetail.name > 1) {
+        let error = 0
+        if (userDetail.name < 1) {
             setNamePlace(true)
             error++;
         }
-        if (userDetail.email > 1) {
+        if (userDetail.email < 1) {
             setEmailPlace(true)
             error++;
         }
-        if (userDetail.password > 1) {
+        if (userDetail.password < 1) {
             setPassPlace(true)
             error++;
         }
-        if (userDetail.confirm_pssword === userDetail.password) {
+        if (userDetail.confirm_pssword != userDetail.password) {
             setconPassPlace(true)
+            error++;
         }
 
+        if (error == 0) {
 
+            localStorage.setItem(userDetail.email, JSON.stringify(userDetail));
+
+            router.push('/')
+        }
         console.log(userDetail, "adslk;fjasdljflasjf")
 
-        localStorage.setItem(userDetail.email, JSON.stringify(userDetail));
     }
 
 
@@ -72,6 +84,8 @@ export default function Registration() {
                                     className="block w-full mt-1 border-gray-300 rounded-md shadow-sm left-2 outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
                             </div>
+                            {namePlace ? <b className="text-red-500">Enter your Name</b> : null}
+
                         </div>
                         <div className="mt-4">
                             <label
@@ -90,6 +104,8 @@ export default function Registration() {
                                     className="block w-full mt-1 border-gray-300 rounded-md shadow-sm outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                 />
                             </div>
+                            {emailPlace ? <b className="text-red-500">Enter your email</b> : null}
+
                         </div>
                         <div className="mt-4">
                             <label
@@ -131,12 +147,12 @@ export default function Registration() {
                         </div>
                         <div className="flex items-center justify-end mt-4">
 
-                            <a
+                            <Link
                                 className="text-sm text-gray-600 underline hover:text-gray-900"
-                                href="#"
+                                href="/"
                             >
                                 Already registered?
-                            </a>
+                            </Link>
                             <button
                                 type="submit"
                                 className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900 false"
