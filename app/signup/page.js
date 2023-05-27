@@ -16,6 +16,7 @@ export default function Registration() {
     const [emailPlace, setEmailPlace] = useState(false)
     const [passPlace, setPassPlace] = useState(false)
     const [conPassPlace, setconPassPlace] = useState(false)
+    const [exist, setExist] = useState(false)
     const handelInputchange = (e) => {
         const { name, value } = e.target;
         setUserDetail((pre) => ({ ...pre, [name]: value }))
@@ -23,30 +24,34 @@ export default function Registration() {
         setEmailPlace(false)
         setPassPlace(false)
         setconPassPlace(false)
+        setExist(false)
     }
     const Resisterhandler = () => {
-        let error = 0
+        console.log("------------->>>><<<<<<<<<");
+
         if (userDetail.name < 1) {
             setNamePlace(true)
-            error++;
         }
         if (userDetail.email < 1) {
             setEmailPlace(true)
-            error++;
         }
         if (userDetail.password < 1) {
             setPassPlace(true)
-            error++;
         }
         if (userDetail.confirm_pssword != userDetail.password) {
             setconPassPlace(true)
-            error++;
         }
+        const existEmail = localStorage.getItem(userDetail.email)
+        console.log(existEmail);
+        const parsedObject = JSON.parse(existEmail);
 
-        if (error == 0) {
 
+        if (parsedObject?.email === userDetail?.email) {
+            setExist(true)
+            console.log("iff");
+        } else {
+            console.log("else");
             localStorage.setItem(userDetail.email, JSON.stringify(userDetail));
-
             router.push('/')
         }
         console.log(userDetail, "adslk;fjasdljflasjf")
@@ -68,6 +73,7 @@ export default function Registration() {
                 <div className="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-lg">
                     <form onSubmit={(e) => e.preventDefault()}>
                         <div>
+                            {exist ? <b className="text-red-400">this Email Alrady Exist</b> : null}
                             <label
                                 htmlFor="name"
                                 className="block text-sm font-medium text-gray-700 undefined"

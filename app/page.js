@@ -27,12 +27,7 @@ export default function Login() {
 
         const item = localStorage.getItem(logData.email)
         const parsedObject = JSON.parse(item);
-        if (item === null) {
-            setSuccess2(true)
 
-        }
-        console.log(item, ".........");
-        console.log(parsedObject.email, "###########");
 
         let erro = 0
         if (logData.email.length < 1) {
@@ -43,13 +38,24 @@ export default function Login() {
             setPasspls(true)
             erro++
         }
-
-
-        if (parsedObject.email === logData.email && parsedObject.password === logData.password) {
-            setSuccess(true)
-            Router.push("/movie")
+        if (item === null) {
+            setSuccess2(true)
+            
         }
+        console.log(item, ".........");
+        console.log(parsedObject.email, "###########");
+        if (erro == 0) {
 
+
+            if (parsedObject.email === logData.email && parsedObject.password === logData.password) {
+                setSuccess(true)
+                Router.push("/movie")
+                erro++
+            } else {
+                setSuccess2(true)
+            }
+
+        }
 
     }
     return (
